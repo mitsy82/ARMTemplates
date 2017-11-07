@@ -103,10 +103,6 @@
       "type": "string",
       "defaultValue": "[concat(parameters('deploymentId'), '-web-db')]"
     },
-    "usercontentSqlDatabaseName": {
-      "type": "string",
-      "defaultValue": "[concat(parameters('deploymentId'), '-web-db')]"
-    },
     "redisCacheName": {
       "type": "string",
       "defaultValue": "[concat(parameters('deploymentId'), '-redis')]"
@@ -286,10 +282,7 @@
           "webSqlDatabaseName": {
             "value": "[parameters('webSqlDatabaseName')]"
           },
-          "usercontentSqlDatabaseName": {
-            "value": "[parameters('webSqlDatabaseName')]"
-          },
-
+         
           "cmHostingPlanName": {
             "value": "[parameters('cmHostingPlanName')]"
           },
@@ -487,7 +480,7 @@
               "coreSqlDatabaseName": "[parameters('coreSqlDatabaseName')]",
               "masterSqlDatabaseName": "[parameters('masterSqlDatabaseName')]",
               "webSqlDatabaseName": "[parameters('webSqlDatabaseName')]",
-              "usercontentSqlDatabaseName": "\"[parameters('webSqlDatabaseName')]",
+            
 
               "redisCacheName": "[parameters('redisCacheName')]",
               "searchServiceName": "[parameters('searchServiceName')]",
