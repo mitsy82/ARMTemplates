@@ -11,6 +11,7 @@
     "cdWebAppNameTidy": "[toLower(trim(parameters('cdWebAppName')))]",
     "coreDbNameTidy": "[toLower(trim(parameters('coreSqlDatabaseName')))]",
     "webDbNameTidy": "[toLower(trim(parameters('webSqlDatabaseName')))]",
+    "usercontentDbNameTidy": "[toLower(trim(parameters('webSqlDatabaseName')))]",
     "masterDbNameTidy": "[toLower(trim(parameters('masterSqlDatabaseName')))]",
     "sqlServerFqdnTidy": "[trim(toLower(parameters('sqlServerFqdn')))]",
     "webSqlServerFqdnTidy": "[trim(toLower(parameters('webSqlServerFqdn')))]",

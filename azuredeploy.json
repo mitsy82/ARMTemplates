@@ -10,7 +10,7 @@
     ],
     "dependencies": "[concat(variables('defaultDependency'), parameters('modules').items)]"
   },
-   "parameters": {
+  "parameters": {
     "modules": {
       "type": "secureObject",
       "defaultValue": {
@@ -103,7 +103,10 @@
       "type": "string",
       "defaultValue": "[concat(parameters('deploymentId'), '-web-db')]"
     },
-
+    "usercontentSqlDatabaseName": {
+      "type": "string",
+      "defaultValue": "[concat(parameters('deploymentId'), '-web-db')]"
+    },
     "redisCacheName": {
       "type": "string",
       "defaultValue": "[concat(parameters('deploymentId'), '-redis')]"
@@ -135,7 +138,7 @@
       "type": "string",
       "defaultValue": "[concat(parameters('deploymentId'), '-cm')]"
     },
-    "setCompatibilityLevelMsDeployPackageUrl":{
+    "setCompatibilityLevelMsDeployPackageUrl": {
       "type": "securestring",
       "minLength": 1,
       "defaultValue": "https://github.com/Sitecore/Sitecore-Azure-Quickstart-Templates/releases/download/v1.5.0/SetCompatibilityLevel.scwdp.zip"
@@ -281,6 +284,9 @@
             "value": "[parameters('masterSqlDatabaseName')]"
           },
           "webSqlDatabaseName": {
+            "value": "[parameters('webSqlDatabaseName')]"
+          },
+          "usercontentSqlDatabaseName": {
             "value": "[parameters('webSqlDatabaseName')]"
           },
 
@@ -481,6 +487,7 @@
               "coreSqlDatabaseName": "[parameters('coreSqlDatabaseName')]",
               "masterSqlDatabaseName": "[parameters('masterSqlDatabaseName')]",
               "webSqlDatabaseName": "[parameters('webSqlDatabaseName')]",
+              "usercontentSqlDatabaseName": "\"[parameters('webSqlDatabaseName')]",
 
               "redisCacheName": "[parameters('redisCacheName')]",
               "searchServiceName": "[parameters('searchServiceName')]",
