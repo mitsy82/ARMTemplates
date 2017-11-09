@@ -90,6 +90,20 @@
       "minLength": 8,
       "defaultValue": "[parameters('sqlServerPassword')]"
     },
+    "usercontentSqlServerName": {
+      "type": "string",
+      "defaultValue": "[concat(parameters('deploymentId'), '-usercontent-sql')]"
+    },
+    "usercontentSqlServerLogin": {
+      "type": "string",
+      "minLength": 1,
+      "defaultValue": "[parameters('sqlServerLogin')]"
+    },
+    "usercontentSqlServerPassword": {
+      "type": "securestring",
+      "minLength": 8,
+      "defaultValue": "[parameters('sqlServerPassword')]"
+    },
 
     "coreSqlDatabaseName": {
       "type": "string",
@@ -102,6 +116,10 @@
     "webSqlDatabaseName": {
       "type": "string",
       "defaultValue": "[concat(parameters('deploymentId'), '-web-db')]"
+    },
+    "usercontentSqlDatabaseName": {
+      "type": "string",
+      "defaultValue": "[concat(parameters('deploymentId'), '-usercontent-db')]"
     },
 
     "redisCacheName": {
@@ -174,6 +192,16 @@
       "minLength": 8,
       "defaultValue": "[concat(uniquestring(parameters('cmWebSqlDatabaseUserName'), parameters('passwordSalt')), toUpper(uniquestring(parameters('cmWebSqlDatabaseUserName'), parameters('passwordSalt'), parameters('sqlServerPassword'))), uniquestring(parameters('cmWebSqlDatabaseUserName'), parameters('passwordSalt'), parameters('sitecoreAdminPassword')))]"
     },
+    "cmUsercontentSqlDatabaseUserName": {
+      "type": "string",
+      "minLength": 1,
+      "defaultValue": "cmusercontentuser"
+    },
+    "cmUsercontentSqlDatabasePassword": {
+      "type": "securestring",
+      "minLength": 8,
+      "defaultValue": "[concat(uniquestring(parameters('cmUsercontentSqlDatabaseUserName'), parameters('passwordSalt')), toUpper(uniquestring(parameters('cmUsercontentSqlDatabaseUserName'), parameters('passwordSalt'), parameters('sqlServerPassword'))), uniquestring(parameters('cmUsercontentSqlDatabaseUserName'), parameters('passwordSalt'), parameters('sitecoreAdminPassword')))]"
+    },
 
     "cdHostingPlanName": {
       "type": "string",
@@ -207,6 +235,17 @@
       "minLength": 8,
       "defaultValue": "[concat(uniquestring(parameters('cdWebSqlDatabaseUserName'), parameters('passwordSalt')), toUpper(uniquestring(parameters('cdWebSqlDatabaseUserName'), parameters('passwordSalt'), parameters('sqlServerPassword'))), uniquestring(parameters('cdWebSqlDatabaseUserName'), parameters('passwordSalt'), parameters('sitecoreAdminPassword')))]"
     },
+    "cdUsercontentSqlDatabaseUserName": {
+      "type": "string",
+      "minLength": 1,
+      "defaultValue": "cdusercontentuser"
+    },
+    "cdUsercontentSqlDatabasePassword": {
+      "type": "securestring",
+      "minLength": 8,
+      "defaultValue": "[concat(uniquestring(parameters('cdUsercontentSqlDatabaseUserName'), parameters('passwordSalt')), toUpper(uniquestring(parameters('cdUsercontentSqlDatabaseUserName'), parameters('passwordSalt'), parameters('sqlServerPassword'))), uniquestring(parameters('cdUsercontentSqlDatabaseUserName'), parameters('passwordSalt'), parameters('sitecoreAdminPassword')))]"
+    },
+
 
     "securityClientIp": {
       "type": "string",
@@ -273,6 +312,15 @@
           "webSqlServerPassword": {
             "value": "[parameters('webSqlServerPassword')]"
           },
+          "usercontentSqlServerName": {
+            "value": "[parameters('usercontentSqlServerName')]"
+          },
+          "usercontentSqlServerLogin": {
+            "value": "[parameters('usercontentSqlServerLogin')]"
+          },
+          "usercontentSqlServerPassword": {
+            "value": "[parameters('usercontentSqlServerPassword')]"
+          },
 
           "coreSqlDatabaseName": {
             "value": "[parameters('coreSqlDatabaseName')]"
@@ -282,6 +330,9 @@
           },
           "webSqlDatabaseName": {
             "value": "[parameters('webSqlDatabaseName')]"
+          },
+          "usercontentSqlDatabaseName": {
+            "value": "[parameters('usercontentSqlDatabaseName')]"
           },
 
           "cmHostingPlanName": {
@@ -393,6 +444,12 @@
           "cdWebSqlDatabasePassword": {
             "value": "[parameters('cdWebSqlDatabasePassword')]"
           },
+          "cdUsercontentSqlDatabaseUserName": {
+            "value": "[parameters('cdUsercontentSqlDatabaseUserName')]"
+          },
+          "cdUsercontentSqlDatabasePassword": {
+            "value": "[parameters('cdUsercontentSqlDatabasePassword')]"
+          },
 
           "sqlServerLogin": {
             "value": "[parameters('sqlServerLogin')]"
@@ -406,6 +463,12 @@
           "webSqlServerPassword": {
             "value": "[parameters('webSqlServerPassword')]"
           },
+          "usercontentSqlServerLogin": {
+            "value": "[parameters('usercontentSqlServerLogin')]"
+          },
+          "usercontentSqlServerPassword": {
+            "value": "[parameters('usercontentSqlServerPassword')]"
+          },
 
           "coreSqlDatabaseName": {
             "value": "[parameters('coreSqlDatabaseName')]"
@@ -416,7 +479,9 @@
           "webSqlDatabaseName": {
             "value": "[parameters('webSqlDatabaseName')]"
           },
-
+          "usercontentSqlDatabaseName": {
+            "value": "[parameters('usercontentSqlDatabaseName')]"
+          },
           "redisCacheName": {
             "value": "[parameters('redisCacheName')]"
           },
@@ -477,10 +542,14 @@
               "webSqlServerName": "[parameters('webSqlServerName')]",
               "webSqlServerLogin": "[parameters('webSqlServerLogin')]",
               "webSqlServerPassword": "[parameters('webSqlServerPassword')]",
+              "usercontentSqlServerName": "[parameters('usercontentSqlServerName')]",
+              "usercontentSqlServerLogin": "[parameters('usercontentSqlServerLogin')]",
+              "usercontentSqlServerPassword": "[parameters('usercontentSqlServerPassword')]",
 
               "coreSqlDatabaseName": "[parameters('coreSqlDatabaseName')]",
               "masterSqlDatabaseName": "[parameters('masterSqlDatabaseName')]",
               "webSqlDatabaseName": "[parameters('webSqlDatabaseName')]",
+              "usercontentSqlDatabaseName": "[parameters('usercontentSqlDatabaseName')]",
 
               "redisCacheName": "[parameters('redisCacheName')]",
               "searchServiceName": "[parameters('searchServiceName')]",
@@ -495,6 +564,8 @@
               "cmMasterSqlDatabasePassword": "[parameters('cmMasterSqlDatabasePassword')]",
               "cmWebSqlDatabaseUserName": "[parameters('cmWebSqlDatabaseUserName')]",
               "cmWebSqlDatabasePassword": "[parameters('cmWebSqlDatabasePassword')]",
+              "cmUsercontentSqlDatabaseUserName": "[parameters('cmUsercontentSqlDatabaseUserName')]",
+              "cmUsercontentSqlDatabasePassword": "[parameters('cmUsercontentSqlDatabasePassword')]",
 
               "cdHostingPlanName": "[parameters('cdHostingPlanName')]",
               "cdWebAppName": "[parameters('cdWebAppName')]",
@@ -502,6 +573,8 @@
               "cdCoreSqlDatabasePassword": "[parameters('cdCoreSqlDatabasePassword')]",
               "cdWebSqlDatabaseUserName": "[parameters('cdWebSqlDatabaseUserName')]",
               "cdWebSqlDatabasePassword": "[parameters('cdWebSqlDatabasePassword')]",
+              "cdUsercontentSqlDatabaseUserName": "[parameters('cdUsercontentSqlDatabaseUserName')]",
+              "cdUsercontentSqlDatabasePassword": "[parameters('cdUsercontentSqlDatabasePassword')]",
 
               "securityClientIp": "[parameters('securityClientIp')]",
               "securityClientIpMask": "[parameters('securityClientIpMask')]",

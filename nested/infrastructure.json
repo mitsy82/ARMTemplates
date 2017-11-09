@@ -14,8 +14,10 @@
     "cdWebAppNameTidy": "[toLower(trim(parameters('cdWebAppName')))]",
     "dbServerNameTidy": "[toLower(trim(parameters('sqlServerName')))]",
     "webDbServerNameTidy": "[toLower(trim(parameters('webSqlServerName')))]",
+    "usercontentDbServerNameTidy": "[toLower(trim(parameters('usercontentSqlServerName')))]",
     "coreDbNameTidy": "[toLower(trim(parameters('coreSqlDatabaseName')))]",
     "webDbNameTidy": "[toLower(trim(parameters('webSqlDatabaseName')))]",
+    "usercontentDbNameTidy": "[toLower(trim(parameters('usercontentSqlDatabaseName')))]",
     "masterDbNameTidy": "[toLower(trim(parameters('masterSqlDatabaseName')))]",
     "searchServiceNameTidy": "[toLower(trim(parameters('searchServiceName')))]",
     "redisCacheNameTidy": "[toLower(trim(parameters('redisCacheName')))]",
@@ -81,6 +83,18 @@
       "type": "securestring",
       "minLength": 8
     },
+    "usercontentSqlServerName": {
+      "type": "string",
+      "defaultValue": "[concat(parameters('deploymentId'), '-usercontent-sql')]"
+    },
+    "usercontentSqlServerLogin": {
+      "type": "string",
+      "minLength": 1
+    },
+    "usercontentSqlServerPassword": {
+      "type": "securestring",
+      "minLength": 8
+    },
     "coreSqlDatabaseName": {
       "type": "string",
       "defaultValue": "[concat(parameters('deploymentId'), '-core-db')]"
@@ -92,6 +106,10 @@
     "webSqlDatabaseName": {
       "type": "string",
       "defaultValue": "[concat(parameters('deploymentId'), '-web-db')]"
+    },
+    "usercontentSqlDatabaseName": {
+      "type": "string",
+      "defaultValue": "[concat(parameters('deploymentId'), '-usercontent-db')]"
     },
     "searchServiceName": {
       "type": "string",
@@ -149,6 +167,11 @@
             "MaxSize": "268435456000",
             "ServiceObjectiveLevel": "S1"
           },
+          "UsercontentSqlDatabase": {
+            "Edition": "Standard",
+            "MaxSize": "268435456000",
+            "ServiceObjectiveLevel": "S1"
+          },
           "Searchservice": {
             "SkuName": "Standard",
             "Partitions": 1,
@@ -186,6 +209,11 @@
             "ServiceObjectiveLevel": "S1"
           },
           "WebSqlDatabase": {
+            "Edition": "Standard",
+            "MaxSize": "268435456000",
+            "ServiceObjectiveLevel": "S1"
+          },
+          "UsercontentSqlDatabase": {
             "Edition": "Standard",
             "MaxSize": "268435456000",
             "ServiceObjectiveLevel": "S1"
@@ -231,6 +259,11 @@
             "MaxSize": "268435456000",
             "ServiceObjectiveLevel": "S1"
           },
+          "UsercontentSqlDatabase": {
+            "Edition": "Standard",
+            "MaxSize": "268435456000",
+            "ServiceObjectiveLevel": "S1"
+          },
           "Searchservice": {
             "SkuName": "Standard",
             "Partitions": 1,
@@ -272,6 +305,11 @@
             "MaxSize": "268435456000",
             "ServiceObjectiveLevel": "S2"
           },
+          "UsercontentSqlDatabase": {
+            "Edition": "Standard",
+            "MaxSize": "268435456000",
+            "ServiceObjectiveLevel": "S2"
+          },
           "Searchservice": {
             "SkuName": "Standard",
             "Partitions": 1,
@@ -309,6 +347,11 @@
             "ServiceObjectiveLevel": "S1"
           },
           "WebSqlDatabase": {
+            "Edition": "Standard",
+            "MaxSize": "268435456000",
+            "ServiceObjectiveLevel": "S3"
+          },
+          "UsercontentSqlDatabase": {
             "Edition": "Standard",
             "MaxSize": "268435456000",
             "ServiceObjectiveLevel": "S3"
@@ -518,6 +561,48 @@
       ]
     },
     {
+      "type": "Microsoft.Sql/servers",
+      "apiVersion": "[variables('dbApiVersion')]",
+      "properties": {
+        "administratorLogin": "[parameters('usercontentSqlServerLogin')]",
+        "administratorLoginPassword": "[parameters('usercontentSqlServerPassword')]",
+        "version": "[parameters('sqlServerVersion')]"
+      },
+      "name": "[variables('usercontentDbServerNameTidy')]",
+      "location": "[parameters('location')]",
+      "tags": {
+        "provider": "[variables('sitecoreTags').provider]"
+      },
+      "resources": [
+        {
+          "type": "firewallrules",
+          "apiVersion": "[variables('dbApiVersion')]",
+          "properties": {
+            "endIpAddress": "0.0.0.0",
+            "startIpAddress": "0.0.0.0"
+          },
+          "name": "AllowAllAzureIps",
+          "dependsOn": [ "[resourceId('Microsoft.Sql/servers', variables('usercontentDbServerNameTidy'))]" ]
+        },
+        {
+          "type": "databases",
+          "apiVersion": "[variables('dbApiVersion')]",
+          "properties": {
+            "edition": "[parameters('resourceSizes').WebSqlDatabase.Edition]",
+            "collation": "[parameters('sqlDatabaseCollation')]",
+            "maxSizeBytes": "[parameters('resourceSizes').WebSqlDatabase.MaxSize]",
+            "requestedServiceObjectiveName": "[parameters('resourceSizes').WebSqlDatabase.ServiceObjectiveLevel]"
+          },
+          "name": "[variables('usercontentDbNameTidy')]",
+          "location": "[parameters('location')]",
+          "dependsOn": [ "[resourceId('Microsoft.Sql/servers', variables('usercontentDbServerNameTidy'))]" ],
+          "tags": {
+            "provider": "[variables('sitecoreTags').provider]"
+          }
+        }
+      ]
+    },
+    {
       "type": "Microsoft.Search/searchServices",
       "apiVersion": "[variables('searchApiVersion')]",
       "name": "[variables('searchServiceNameTidy')]",
@@ -588,6 +673,7 @@
       "value": {
         "sqlServerFqdn": "[reference(concat('Microsoft.Sql/servers/', variables('dbServerNameTidy'))).fullyQualifiedDomainName]",
         "webSqlServerFqdn": "[reference(concat('Microsoft.Sql/servers/', variables('webDbServerNameTidy'))).fullyQualifiedDomainName]",
+        "usercontentSqlServerFqdn": "[reference(concat('Microsoft.Sql/servers/', variables('usercontentDbServerNameTidy'))).fullyQualifiedDomainName]",
         "cdWebAppFqdn": "[reference(concat('Microsoft.Web/sites/', variables('cdWebAppNameTidy'))).defaultHostName]"
       }
     }
